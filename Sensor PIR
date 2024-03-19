@@ -1,0 +1,66 @@
+#include <LiquidCrystal_I2C.h>
+int led = 13;
+int pirpin = 12;
+int pirState = LOW;
+int val = 0;
+//int lux;
+#define ldrpin 7
+LiquidCrystal_I2C lcd(0x27,20,4);
+
+void setup() {
+pinMode(led, OUTPUT);
+pinMode(pirpin, INPUT);
+pinMode(ldrpin, INPUT);
+Serial.begin(9600);
+lcd.init();
+lcd.backlight();
+lcd.setCursor(1,0);
+lcd.print("LAMPU OTOMATIS");
+lcd.setCursor(2,1);
+lcd.print("A. NAJMA A.");
+delay(2000);
+lcd.clear();
+  // put your setup code here, to run once:
+
+}
+
+void loop() {
+  val = digitalRead(pirpin);
+ // lux = digitalRead(7);
+  if(val == LOW && digitalRead(ldrpin) == LOW){
+    digitalWrite(led, LOW);
+      lcd.setCursor(0,0);
+      lcd.print("Ruangan Terang");
+    if(pirState == HIGH){
+      lcd.setCursor(0,1);
+      lcd.print("Tidak Ada Gerakan");
+      pirState == LOW;
+    }
+  }
+  else{
+  if(val == HIGH && digitalRead(ldrpin) == LOW){
+    digitalWrite(led, LOW);
+    lcd.setCursor(0,0);
+    lcd.print("Ruangan Terang");
+    if(pirState == LOW){
+      lcd.setCursor(0,1);
+      lcd.print("Ada Gerakan");
+      pirState == HIGH;
+    }
+  }
+  else{
+    if(val == HIGH && digitalRead(ldrpin) == HIGH){
+      digitalWrite(led, HIGH);
+      lcd.setCursor(0,0);
+      lcd.print("Ruangan  Redup");
+      if(pirState == LOW){
+        lcd.setCursor(0,1);
+        lcd.print("Ada Gerakan");
+        pirState == HIGH;
+      }
+    }
+  }
+  }
+  
+
+}
